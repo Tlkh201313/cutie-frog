@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>stay with me ♡</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --sky: #74aaff;
+      --cream: #fff5f8;
+      --brown: #3d2b1f;
+      --shadow: rgba(61, 43, 31, 0.18);
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--brown);
+      background:
+        radial-gradient(circle at 20% 20%, #ffe4ef 0%, transparent 45%),
+        radial-gradient(circle at 80% 80%, #dce9ff 0%, transparent 40%),
+        linear-gradient(160deg, #fff0f6 0%, #eef4ff 55%, #ffe8f2 100%);
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      overflow-x: hidden;
+      cursor: pointer;
+      min-height: 100dvh;
+    }
+
+    .sparkles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 184, 208, 0.5) 1.5px, transparent 1.5px);
+      background-size: 120px 120px, 180px 180px;
+      opacity: 0.45;
+    }
+
+    .card {
+      position: relative;
+      width: min(720px, 98vw);
+      background: var(--cream);
+      border: 4px solid var(--brown);
+      border-radius: 28px;
+      box-shadow:
+        0 18px 0 var(--shadow),
+        0 28px 50px rgba(255, 143, 178, 0.25);
+      overflow: hidden;
+    }
+
+    .titlebar {
+      padding: 14px 16px 12px;
+      background: linear-gradient(180deg, #ffd6e8, #ffc8df);
+      border-bottom: 3px solid var(--brown);
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: default;
+    }
+
+    .titlebar h1 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .card-body {
+      cursor: pointer;
+    }
+
+    .stage-wrap {
+      position: relative;
+      background: var(--sky);
+      width: 100%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    #frog-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      pointer-events: none;
+    }
+
+    .plea {
+      position: absolute;
+      left: 50%;
+      bottom: 10%;
+      transform: translateX(-50%) scale(0.6);
+      margin: 0;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 3px solid var(--brown);
+      border-radius: 999px;
+      font-size: clamp(1rem, 4vw, 1.3rem);
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 6px 0 rgba(61, 43, 31, 0.15);
+      z-index: 3;
+      transition:
+        opacity 0.25s ease,
+        transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .plea.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .hint {
+      text-align: center;
+      padding: 16px 18px 20px;
+      font-size: 1rem;
+      opacity: 0.75;
+    }
+
+    .hearts-layer,
+    .fx-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 20;
+    }
+
+    .fx-layer {
+      z-index: 15;
+    }
+
+    .heart {
+      position: absolute;
+      object-fit: contain;
+      animation: float-up 1.8s ease-out forwards;
+      filter: drop-shadow(0 2px 0 rgba(61, 43, 31, 0.15));
+    }
+
+    .ripple {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple-out 0.65s ease-out forwards;
+    }
+
+    .ripple.pink {
+      background: rgba(255, 143, 178, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .ripple.blue {
+      background: rgba(116, 170, 255, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes float-up {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.4) rotate(-8deg);
+      }
+      15% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1) rotate(6deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-120px) scale(0.85) rotate(14deg);
+      }
+    }
+
+    @keyframes ripple-out {
+      to {
+        transform: translate(-50%, -50%) scale(10);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sparkles" aria-hidden="true"></div>
+
+  <main class="card">
+    <header class="titlebar">
+      <h1>little frog corner ♡</h1>
+    </header>
+
+    <div class="card-body" id="card-body">
+      <div class="stage-wrap" id="stage">
+        <img
+          id="frog-img"
+          src="gif but in frames/frame_0_delay-0.1s.png"
+          alt="Cute frog spinning on a chair"
+          draggable="false"
+        />
+        <p class="plea" id="plea" aria-live="polite">don't leave… 🥺</p>
+      </div>
+
+      <p class="hint" id="hint">tap the frog if you wanna stay ♡</p>
+    </div>
+  </main>
+
+  <div class="fx-layer" id="fx-layer" aria-hidden="true"></div>
+  <div class="hearts-layer" id="hearts-layer" aria-hidden="true"></div>
+
+  <script>
+    const FRAMES = Array.from(
+      { length: 8 },
+      (_, i) => `gif but in frames/frame_${i}_delay-0.1s.png`
+    );
+    const CRYING = "crying.png";
+    const HEART = "heart.png";
+    const SPIN_AGAIN_MS = 1000;
+    const SPIN = { idle: 100, fast: 45 };
+
+    const frogImg = document.getElementById("frog-img");
+    const plea = document.getElementById("plea");
+    const hint = document.getElementById("hint");
+    const heartsLayer = document.getElementById("hearts-layer");
+    const fxLayer = document.getElementById("fx-layer");
+
+    const state = { mode: "idle", nearClose: false, hasPetOnce: false };
+    let frameIndex = 0;
+    let spinDirection = 1;
+    let spinTimer = null;
+    let spinAgainTimer = null;
+
+    function preload(sources) {
+      sources.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
+
+    function stopSpin() {
+      if (spinTimer) {
+        clearInterval(spinTimer);
+        spinTimer = null;
+      }
+    }
+
+    function showFrame(index) {
+      frameIndex = ((index % FRAMES.length) + FRAMES.length) % FRAMES.length;
+      frogImg.src = FRAMES[frameIndex];
+    }
+
+    function startSpin(speedMs, direction) {
+      stopSpin();
+      spinDirection = direction;
+      showFrame(frameIndex + spinDirection);
+      spinTimer = setInterval(() => {
+        showFrame(frameIndex + spinDirection);
+      }, speedMs);
+    }
+
+    function setIdleVisual() {
+      state.mode = "idle";
+      plea.classList.remove("show");
+      startSpin(SPIN.idle, 1);
+    }
+
+    function setCryingVisual() {
+      if (state.mode === "happy") return;
+      stopSpin();
+      state.mode = "crying";
+      frogImg.src = CRYING;
+      plea.classList.add("show");
+    }
+
+    function setHappyVisual() {
+      clearTimeout(spinAgainTimer);
+      state.mode = "happy";
+      state.hasPetOnce = true;
+      plea.classList.remove("show");
+      hint.textContent = ">_< ♡";
+      startSpin(SPIN.fast, 1);
+
+      spinAgainTimer = setTimeout(() => {
+        if (state.nearClose) {
+          setCryingVisual();
+        } else {
+          setIdleVisual();
+        }
+      }, SPIN_AGAIN_MS);
+    }
+
+    function isOnFrog(clientX, clientY) {
+      const rect = frogImg.getBoundingClientRect();
+      const nx = (clientX - rect.left) / rect.width;
+      const ny = (clientY - rect.top) / rect.height;
+
+      if (nx < 0 || nx > 1 || ny < 0 || ny > 1) return false;
+
+      const body = ((nx - 0.5) / 0.32) ** 2 + ((ny - 0.44) / 0.36) ** 2 <= 1;
+      const chair = nx > 0.2 && nx < 0.8 && ny > 0.5 && ny < 0.84;
+      return body || chair;
+    }
+
+    function spawnRipple(x, y, onStage) {
+      const ripple = document.createElement("span");
+      ripple.className = `ripple ${onStage ? "blue" : "pink"}`;
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      fxLayer.appendChild(ripple);
+      ripple.addEventListener("animationend", () => ripple.remove());
+    }
+
+    function spawnHearts(x, y, count = 8) {
+      for (let i = 0; i < count; i++) {
+        const heart = document.createElement("img");
+        heart.src = HEART;
+        heart.alt = "";
+        heart.className = "heart";
+        heart.style.left = `${x + (Math.random() - 0.5) * 90}px`;
+        heart.style.top = `${y + (Math.random() - 0.5) * 30}px`;
+        heart.style.animationDelay = `${Math.random() * 0.25}s`;
+        const size = 26 + Math.random() * 18;
+        heart.style.width = `${size}px`;
+        heart.style.height = `${size}px`;
+        heartsLayer.appendChild(heart);
+        heart.addEventListener("animationend", () => heart.remove());
+      }
+    }
+
+    function handleTap(clientX, clientY, onStage) {
+      if (isOnFrog(clientX, clientY)) {
+        setHappyVisual();
+        spawnHearts(clientX, clientY, 8);
+        return;
+      }
+
+      spawnRipple(clientX, clientY, onStage);
+      spawnHearts(clientX, clientY, 3);
+    }
+
+    function isNearBrowserClose(clientX, clientY) {
+      const fromTop = clientY;
+      const fromRight = window.innerWidth - clientX;
+      const zone = Math.min(160, window.innerWidth * 0.22);
+      return fromTop < 90 && fromRight < zone;
+    }
+
+    function updateCloseProximity(clientX, clientY) {
+      if (state.mode === "happy") return;
+
+      const near = isNearBrowserClose(clientX, clientY);
+      if (near && !state.nearClose) {
+        state.nearClose = true;
+        setCryingVisual();
+      } else if (!near && state.nearClose) {
+        state.nearClose = false;
+        setIdleVisual();
+      }
+    }
+
+    function onPointerTap(event) {
+      if (event.target.closest(".titlebar")) return;
+
+      const onStage = Boolean(event.target.closest("#stage, #card-body"));
+      handleTap(event.clientX, event.clientY, onStage);
+    }
+
+    document.addEventListener("mousemove", (event) => {
+      updateCloseProximity(event.clientX, event.clientY);
+    });
+
+    document.documentElement.addEventListener("mouseleave", (event) => {
+      if (state.mode === "happy") return;
+      if (event.clientY <= 0 || event.clientX >= window.innerWidth - 20) {
+        state.nearClose = true;
+        setCryingVisual();
+      }
+    });
+
+    window.addEventListener("beforeunload", (event) => {
+      if (!state.hasPetOnce) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    });
+
+    document.body.addEventListener("click", onPointerTap);
+
+    document.body.addEventListener(
+      "touchend",
+      (event) => {
+        if (event.target.closest(".titlebar")) return;
+        const touch = event.changedTouches[0];
+        if (!touch) return;
+        const onStage = Boolean(event.target.closest("#stage, #card-body"));
+        handleTap(touch.clientX, touch.clientY, onStage);
+      },
+      { passive: true }
+    );
+
+    function boot() {
+      preload([...FRAMES, CRYING, HEART]);
+      frameIndex = 0;
+      showFrame(0);
+      startSpin(SPIN.idle, 1);
+    }
+
+    boot();
+  </script>
+</body>
+</html>
